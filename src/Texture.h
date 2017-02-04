@@ -11,8 +11,8 @@ GLuint loadTexture(const char* file) {
 	GLuint texture;
 
 	//Load image
-	unsigned char* image = SOIL_load_image(file, &width, &height, 0, SOIL_LOAD_RGB);
-	if(!texture)
+	unsigned char* image = SOIL_load_image(file, &width, &height, 0, SOIL_LOAD_RGBA);
+	if(!image)
 		fprintf(stderr, "Failed to load the texture. %s\n",  SOIL_last_result());
 
 	printf("%d %d\n",width, height);
@@ -20,8 +20,8 @@ GLuint loadTexture(const char* file) {
 	//Generate textures
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0,
-				 GL_RGB, GL_UNSIGNED_BYTE, image);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
+				 GL_RGBA, GL_UNSIGNED_BYTE, image);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 

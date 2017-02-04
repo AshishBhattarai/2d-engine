@@ -9,6 +9,6 @@ bool shouldCloseWindow();
 void startLoop();
 int getDelta();
 void endLoop();
-void cleanUp();
+void displayCleanUp();
 
 #endif
