@@ -9,8 +9,10 @@ struct Model {
 	GLuint indiID;
 };
 
-//takes model coors loads it and returns Model
-struct Model loadModel(float* vertices, float* text_coords, int* indices);
+//Loads model with a pre set coordinates
+struct Model loadModel();
 
+//Renders the given model
+void renderModel(struct Model);
 
 #endif

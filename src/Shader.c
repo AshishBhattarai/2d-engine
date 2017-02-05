@@ -80,4 +80,5 @@ void useShader() {
 void shaderCleanUp() {
 	glUseProgram(0);
 	glDeleteProgram(program);
+	fprintf(stderr, "Shader Deleted.\n");
 }

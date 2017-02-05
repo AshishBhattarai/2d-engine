@@ -6,7 +6,7 @@
 #include <GLFW/glfw3.h>
 
 static GLFWwindow* window;
-char* wTitle;
+static char* wTitle;
 static int fpsCnt =0, lastCount = 0;
 static int lastFrame, delta = 0;
 
@@ -45,6 +45,8 @@ void createDisplay(int w, int h, const char* title) {
 	//OGL version - 3.2
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	//creating window
 	window = glfwCreateWindow(w, h, title, NULL, NULL);
@@ -62,6 +64,8 @@ void createDisplay(int w, int h, const char* title) {
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
+
+	glViewport(0, 0, 640, 480);
 }
 
 bool shouldCloseWindow() {
@@ -82,7 +86,7 @@ void endLoop() {
 	glfwPollEvents();
 }
 
-void cleanUp() {
+void displayCleanUp() {
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	fprintf(stdout, "Window destroyed.");

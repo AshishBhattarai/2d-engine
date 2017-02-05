@@ -1,11 +1,11 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-
 #include <GL/gl.h>
 #include <SOIL/SOIL.h>
 #include <stdio.h>
 
+//Load texture from the given file
 GLuint loadTexture(const char* file) {
 	int width, height;
 	GLuint texture;

@@ -1,7 +1,27 @@
 #include "Model.h"
 
 
-struct Model loadModel(float* vertices, float* texCoords, int* indices) {
+struct Model loadModel() {
+
+	float vertices[] = {
+		-1.0f, 1.0f, 0.0f,
+		-1.0f, -1.0f, 0.0f,
+		 1.0f, -1.0f, 0.0f,
+		 1.0f, 1.0f, 0.0f
+	};
+
+	float texCoords[] = {
+		0,0,
+		0,1,
+		1,1,
+		1,0
+	};
+
+	int indices[] = {
+		0,1,2,
+		2,3,0
+	};
+
 	//VBOs
 	GLuint vID = 0;
 	GLuint tID = 0;
@@ -44,3 +64,15 @@ struct Model loadModel(float* vertices, float* texCoords, int* indices) {
 	return model;
 }
 
+void renderModel(struct Model model) {
+
+		glBindVertexArray(model.vaoID);
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.indiID);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(0);
+		glBindVertexArray(0);
+}
