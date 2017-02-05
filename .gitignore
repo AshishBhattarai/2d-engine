@@ -1,0 +1,12 @@
+# Ignore the build and lib dirs
+build
+lib/*
+
+# Ignore any executables
+bin/*.out
+
+# Ignore test
+test
+
+# Ignore vscode configs
+.vscode
