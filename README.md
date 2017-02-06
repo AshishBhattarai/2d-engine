@@ -16,4 +16,4 @@
   * GLEW
   * SOIL
 
-##License [NO ADDED]
+##License [GPL 2.0]
