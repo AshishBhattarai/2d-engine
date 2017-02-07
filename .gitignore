@@ -3,7 +3,7 @@ build
 lib/*
 
 # Ignore any executables
-bin/*.out
+bin/game.out
 
 # Ignore test
 test

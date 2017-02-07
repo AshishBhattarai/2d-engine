@@ -3,10 +3,13 @@
 #include <stdlib.h>
 #include <GL/glew.h>
 
+
 GLuint program;
 
+//location of projection matrix &composite matrix in shaders
+GLuint locProjection, locComposite;
 
-GLuint loadShader(const char *file, GLuint type) {
+static GLuint loadShader(const char *file, GLuint type) {
 
 	FILE *fp = NULL;
 	int size = 0;
@@ -52,6 +55,23 @@ GLuint loadShader(const char *file, GLuint type) {
 	return shader;
 }
 
+static void getAllUniformLocs() {
+	locProjection = glGetUniformLocation(program, "projectionMatrix");
+	locComposite = glGetUniformLocation(program, "compositeMatrix");
+}
+
+static void loadMatrix(GLuint location, mat4_t mat4) {
+	glUniformMatrix4fv(location, 1, GL_FALSE, mat4);
+}
+
+void loadProjectionMatrix(mat4_t proj) {
+	loadMatrix(locProjection, proj);
+}
+
+void loadCompositeMatrix(mat4_t mat4) {
+	loadMatrix(locComposite, mat4);
+}
+
 void shaders(const char* vertexFile, const char* fragmentFile) {
 	//loadShaders
 	GLuint vertex = loadShader(vertexFile, GL_VERTEX_SHADER);
@@ -68,13 +88,18 @@ void shaders(const char* vertexFile, const char* fragmentFile) {
 
 	glLinkProgram(program);
 	glValidateProgram(program);
+	getAllUniformLocs();
 
 	glDeleteShader(vertex);
 	glDeleteShader(fragment);
 }
 
-void useShader() {
+void bindShader() {
 	glUseProgram(program);
+}
+
+void unBindShader() {
+	glUseProgram(0);
 }
 
 void shaderCleanUp() {
