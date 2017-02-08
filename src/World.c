@@ -7,18 +7,17 @@
 static struct Model model;
 
 //load the game world
-void loadWorld() {
+void loadWorld(float w, float h) {
 
 	shaders("shaders/vertex.glsl", "shaders/fragment.glsl");
 	model = loadModel();
 
-	mat4_t compMat4 = createMat4(NULL);
+	float* compMat4 = createMat4(NULL);
 	loadIdentity(compMat4);
 	scale(compMat4, 16.0f);
-	float vec2[] = {1.0f, 1.0f, 0.0f};
-	translate(compMat4, vec2);
+	translate(compMat4, (vec2D){2,1});
 
-	mat4_t proj = loadOrtho(0.0f, 640.0f, 0.0, 480.0f, -1.0f, 1.0f);
+	float* proj = loadOrtho(0.0f, w, 0.0, h, -1.0f, 1.0f);
 	bindShader();
 	loadProjectionMatrix(proj);
 	loadCompositeMatrix(compMat4);

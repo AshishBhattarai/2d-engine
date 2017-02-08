@@ -60,15 +60,15 @@ static void getAllUniformLocs() {
 	locComposite = glGetUniformLocation(program, "compositeMatrix");
 }
 
-static void loadMatrix(GLuint location, mat4_t mat4) {
+static void loadMatrix(GLuint location, float* mat4) {
 	glUniformMatrix4fv(location, 1, GL_FALSE, mat4);
 }
 
-void loadProjectionMatrix(mat4_t proj) {
+void loadProjectionMatrix(float* proj) {
 	loadMatrix(locProjection, proj);
 }
 
-void loadCompositeMatrix(mat4_t mat4) {
+void loadCompositeMatrix(float* mat4) {
 	loadMatrix(locComposite, mat4);
 }
 

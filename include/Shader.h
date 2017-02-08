@@ -15,9 +15,9 @@ void unBindShader();
 void shaderCleanUp();
 
 //load Composite matrix to shader
-void loadCompositeMatrix(mat4_t mat4);
+void loadCompositeMatrix(float* mat4);
 
-void loadProjectionMatrix(mat4_t proj);
+void loadProjectionMatrix(float* proj);
 
 
 #endif

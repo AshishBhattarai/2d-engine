@@ -5,11 +5,13 @@
 
 int main() {
 
-	createDisplay(640, 480, "2D-Engine");
+	int width = 800, height = 600;
+
+	createDisplay(width, height, "2D-Engine");
 
 	GLuint texture = loadTexture("3.png");
 
-	loadWorld();
+	loadWorld(width, height);
 
 	prepOGL();
 	while(!shouldCloseWindow()) {

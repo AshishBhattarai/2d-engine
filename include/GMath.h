@@ -2,10 +2,7 @@
 #define GMATH_H
 
 #include <stdlib.h>
-
-typedef float* mat4_t;
-typedef float* vec3_t;
-typedef float* vec2_t;
+#include <math.h>
 
 /*
  * Math library to handel Opengl matrices & vertices
@@ -14,17 +11,36 @@ typedef float* vec2_t;
  * Supports 3D & 2D Vectors
 */
 
-//Vector
+typedef struct vec2 vec2D;
 
+//Vector
+struct vec2 {
+	float x;
+	float y;
+};
+
+
+static inline float magnitude2D(vec2D vec) {
+	return sqrt(vec.x*vec.x + vec.y*vec.y);
+}
+
+static inline vec2D normalie2D(vec2D vec) {
+	float mag = magnitude2D(vec);
+	return (vec2D){vec.x/mag, vec.y/mag};
+}
+
+static inline float dotPorduct2D(vec2D vec1, vec2D vec2) {
+	return (vec1.x*vec2.x) + (vec1.y*vec2.y);
+}
 
 //Matrix
 
 
 //if mat is a nullptr allocates memory ofr 16 elem vector only
 //if mat is not null copys mat too
-static inline mat4_t createMat4(mat4_t destMat4){
+static inline float* createMat4(float* destMat4){
 
-	mat4_t mat4 = (mat4_t)malloc(sizeof(float)*16);
+	float* mat4 = (float*)malloc(sizeof(float)*16);
 	//if ma is not a nullptr copy mat
 	if(destMat4) {
 
@@ -42,7 +58,7 @@ static inline mat4_t createMat4(mat4_t destMat4){
 }
 
 //load identity matrix to the given map4
-static inline void loadIdentity(mat4_t mat4) {
+static inline void loadIdentity(float* mat4) {
 
 	mat4[0] = 1.0;	mat4[4] = 0.0;	mat4[8] = 0.0;	mat4[12] = 0.0;
 	mat4[1] = 0.0;	mat4[5] = 1.0;	mat4[9] = 0.0;	mat4[13] = 0.0;
@@ -54,12 +70,7 @@ static inline void loadIdentity(mat4_t mat4) {
 * Translates the given matrix by the given vec3
 * and frees the given matrix
 */
-static inline void translate(mat4_t mat4, vec3_t vec) {
-
-	float x = vec[0], y = vec[1], z = vec[2];
-
-	if(!mat4)
-		loadIdentity(mat4);
+static inline void translate(float* mat4, vec2D vec) {
 
 	float destMat4[16];
 
@@ -68,10 +79,10 @@ static inline void translate(mat4_t mat4, vec3_t vec) {
 	destMat4[2] = mat4[2]; 	destMat4[6] = mat4[6];	destMat4[10] = mat4[10];
 	destMat4[3] = mat4[3]; 	destMat4[7] = mat4[7];	destMat4[11] = mat4[11];
 
-	destMat4[12] = mat4[0] * x + mat4[4] * y + mat4[8] * z + mat4[12];
-	destMat4[13] = mat4[1] * x + mat4[5] * y + mat4[9] * z + mat4[13];
-	destMat4[14] = mat4[2] * x + mat4[6] * y + mat4[10] * z + mat4[14];
-	destMat4[15] = mat4[3] * x + mat4[7] * y + mat4[11] * z + mat4[15];
+	destMat4[12] = mat4[0] * vec.x + mat4[4] * vec.y + mat4[8] * vec.z + mat4[12];
+	destMat4[13] = mat4[1] * vec.x + mat4[5] * vec.y + mat4[9] * vec.z + mat4[13];
+	destMat4[14] = mat4[2] * vec.x + mat4[6] * vec.y + mat4[10] * vec.z + mat4[14];
+	destMat4[15] = mat4[3] * vec.x + mat4[7] * vec.y + mat4[11] * vec.z + mat4[15];
 
 	for(int i = 0; i < 16; ++i) {
 		mat4[i] = destMat4[i];
@@ -82,19 +93,19 @@ static inline void translate(mat4_t mat4, vec3_t vec) {
 * scales the given matrix by the given vec3
 * and frees the given matix(parameter)
 */
-static inline void scale(mat4_t mat4, float val) {
-
-	float x = val, y = val, z= val;
-
-	if(!mat4)
-		loadIdentity(mat4);
+static inline void scale(float* mat4, float val) {
 
 	float destMat4[16];
 
-	destMat4[0] = mat4[0] * x;	destMat4[4] = mat4[4] * y;	destMat4[8] = mat4[8] * z;
-	destMat4[1] = mat4[1] * x;	destMat4[5] = mat4[5] * y;	destMat4[9] = mat4[9] * z;
-	destMat4[2] = mat4[2] * x; 	destMat4[6] = mat4[6] * y;	destMat4[10] = mat4[10] * z;
-	destMat4[3] = mat4[3] * x;	destMat4[7] = mat4[7] * y;	destMat4[11] = mat4[11] * z;
+	destMat4[0] = mat4[0] * val;	destMat4[4] = mat4[4] * val;
+	destMat4[1] = mat4[1] * val;	destMat4[5] = mat4[5] * val;
+	destMat4[2] = mat4[2] * val; 	destMat4[6] = mat4[6] * val;
+	destMat4[3] = mat4[3] * val;	destMat4[7] = mat4[7] * val;
+
+	destMat4[8] = mat4[8] * val;
+	destMat4[9] = mat4[9] * val;
+	destMat4[10] = mat4[10] * val;
+	destMat4[11] = mat4[11] * val;
 
 	destMat4[12] = mat4[12];
 	destMat4[13] = mat4[13];
@@ -106,12 +117,11 @@ static inline void scale(mat4_t mat4, float val) {
 	}
 }
 
-
 // Orthogonal projection matrix
-static inline mat4_t loadOrtho(float left, float right, float bottom, float top,
+static inline float* loadOrtho(float left, float right, float bottom, float top,
 						float near, float far) {
 
-	mat4_t destMat4 = createMat4(NULL);
+	float* destMat4 = createMat4(NULL);
 	loadIdentity(destMat4);
 
 	destMat4[0] = 2 / (right - left);
