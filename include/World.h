@@ -2,10 +2,10 @@
 #define WORLD_H
 
 
-#include "Tilemap.h"
+#include "Level.h"
 
 //Loads Word with give width & height
-void loadWorld(float w, float h, Tilemap map);
+void loadWorld(float w, float h, Level lvl);
 
 //Prepare OGL
 void prepOGL();

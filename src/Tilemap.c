@@ -1,5 +1,6 @@
 #include "Tilemap.h"
 #include "Shader.h"
+#include "Texture.h"
 #include <stdio.h>
 #include <SOIL/SOIL.h>
 
@@ -39,6 +40,7 @@ Tilemap loadTiles(const char* bitMapFile) {
 				Tile tile;
 				tile.pos.x = x;
 				tile.pos.y = y;
+				tile.texture = loadTexture("3a.png");
 				tiles[ntile] = tile;
 				++ntile;
 			}

@@ -1,7 +1,15 @@
 #ifndef TILEMAP_H
 #define TILEMAP_H
 
-#include "Tile.h"
+#include "GMath.h"
+#include "GL/glew.h"
+
+typedef struct Tile Tile;
+
+struct Tile {
+	Vec2D pos;
+	GLuint texture;
+};
 
 typedef struct Tilemap Tilemap;
 

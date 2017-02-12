@@ -6,41 +6,31 @@
 
 static Model model;
 static Tilemap tilemap;
+static GLuint bg;
 static float* compMat4;
 static float scale = 32.0f;
-static int HEIGHT, WIDTH;
+static float WIDTH, HEIGHT;
+static float RATIO;
 
 //load the game world
-void loadWorld(float w, float h, Tilemap map) {
+void loadWorld(float w, float h, Level lvl) {
 
-	HEIGHT = h;
+	tilemap = lvl.map;
+	bg = lvl.bg;
 	WIDTH = w;
-	tilemap = map;
+	HEIGHT = h;
 
 	shaders("shaders/vertex.glsl", "shaders/fragment.glsl");
 	model = loadModel();
 
-	float* proj = loadOrtho(0.0f, w, 0.0, h, -1.0f, 1.0f);
+	RATIO = w/h;
+	float* proj = loadOrtho(0.0, w*RATIO, 0.0, h*RATIO, -1.0f, 1.0f);
+
 	bindShader();
 	loadProjectionMatrix(proj);
 	unBindShader();
 
 	free(proj);
-}
-
-//prepare OpenGL before starting loop
-void prepOGL() {
-
-	glActiveTexture(GL_TEXTURE0);
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_CULL_FACE);
-}
-
-//prepare to render something on da screen
-void prepRender() {
-	glClear(GL_COLOR_BUFFER_BIT);
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-	bindShader();
 }
 
 void bindModel() {
@@ -58,6 +48,23 @@ void unBindModel() {
 	glBindVertexArray(0);
 }
 
+//prepare OpenGL before starting loop
+void prepOGL() {
+
+	glActiveTexture(GL_TEXTURE0);
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_CULL_FACE);
+
+	bindModel();
+	bindShader();
+}
+
+//prepare to render something on da screen
+void prepRender() {
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+}
+
 //Render the world
 void renderWorld() {
 
@@ -66,28 +73,37 @@ void renderWorld() {
 		fprintf(stderr,"OpenGL error: %d\n", err);
     }
 
-	bindModel();
+
+	//backGround
+	compMat4 = createMat4(NULL);
+	loadIdentity(compMat4);
+	glBindTexture(GL_TEXTURE_2D, bg);
+	translateMat(compMat4, (Vec2D){(WIDTH/2)*RATIO, (HEIGHT/2)*RATIO});
+	scale2DMat(compMat4,(Vec2D){(WIDTH/2)*RATIO, (HEIGHT/2)*RATIO} );
+	loadCompositeMatrix(compMat4);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
 
 	//Render tilemap
 	for(int i = 0; i < tilemap.nTiles; ++i) {
-		compMat4 = createMat4(NULL);
+
 		loadIdentity(compMat4);
 
-		//Calculate Scale according to resolution
-		float viewX = (float)(WIDTH)/(scale);
-		float viewY = (float)(HEIGHT)/(scale);
-		translateMat(compMat4, (Vec2D){tilemap.tiles[i].pos.x * viewX,
-									   tilemap.tiles[i].pos.y * viewY});
+		glBindTexture(GL_TEXTURE_2D, tilemap.tiles[i].texture);
+
+		translateMat(compMat4, (Vec2D){tilemap.tiles[i].pos.x * scale*2,
+									   tilemap.tiles[i].pos.y * scale*2});
 		scaleMat(compMat4, scale);
 		loadCompositeMatrix(compMat4);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-	unBindModel();
 }
 
 //cleanUp
 void worldCleanUp() {
+	unBindShader();
+	unBindModel();
 	free(compMat4);
 	freeMap(&tilemap);
 	shaderCleanUp();
