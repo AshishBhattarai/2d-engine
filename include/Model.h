@@ -3,6 +3,8 @@
 
 #include <GL/glew.h>
 
+typedef struct Model Model;
+
 //Model
 struct Model {
 	GLuint vaoID;
@@ -10,9 +12,7 @@ struct Model {
 };
 
 //Loads model with a pre set coordinates
-struct Model loadModel();
+Model loadModel();
 
-//Renders the given model
-void renderModel(struct Model);
 
 #endif

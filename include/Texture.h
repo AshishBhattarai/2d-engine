@@ -1,7 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <GL/gl.h>
+#include <GL/glew.h>
 #include <SOIL/SOIL.h>
 #include <stdio.h>
 

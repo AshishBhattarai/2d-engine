@@ -65,7 +65,7 @@ void createDisplay(int w, int h, const char* title) {
 		exit(EXIT_FAILURE);
 	}
 
-	glViewport(0, 0, 640, 480);
+	glViewport(0, 0, w, h);
 }
 
 bool shouldCloseWindow() {

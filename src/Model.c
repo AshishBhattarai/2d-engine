@@ -1,7 +1,7 @@
 #include "Model.h"
 
 
-struct Model loadModel() {
+Model loadModel() {
 
 	float vertices[] = {
 		-1.0f, 1.0f, 0.0f,
@@ -57,22 +57,9 @@ struct Model loadModel() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
-	struct Model model;
+	Model model;
 	model.vaoID = vaoID;
 	model.indiID = iID;
 
 	return model;
-}
-
-void renderModel(struct Model model) {
-
-		glBindVertexArray(model.vaoID);
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.indiID);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(0);
-		glBindVertexArray(0);
 }

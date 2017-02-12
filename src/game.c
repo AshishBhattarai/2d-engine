@@ -1,29 +1,26 @@
 #include "Display.h"
 #include "Texture.h"
 #include "World.h"
+#include "Tilemap.h"
 #include <stdio.h>
+
+#define WIDTH 1280
+#define HEIGHT 720
 
 int main() {
 
-	int width = 800, height = 600;
+	createDisplay(WIDTH, HEIGHT, "2D-Engine");
+	
+	//Image - 90 C-CW - Flip Horizontally - Flip V
+	Tilemap map = loadTiles("t1.png");
 
-	createDisplay(width, height, "2D-Engine");
-
-	GLuint texture = loadTexture("3.png");
-
-	loadWorld(width, height);
+	loadWorld(WIDTH, HEIGHT, map);
 
 	prepOGL();
 	while(!shouldCloseWindow()) {
 		startLoop();
-
 		prepRender();
-
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
-
 		renderWorld();
-
 		endLoop();
 	}
 

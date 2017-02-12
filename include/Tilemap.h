@@ -13,6 +13,7 @@ struct Tilemap {
 //uses bitmap to load tiles coordinates to any array of Tile
 Tilemap loadTiles(const char* bitMapFile);
 
+//free the loaded tiles
 void freeMap(Tilemap* map);
 
 #endif

@@ -33,6 +33,10 @@ static inline float dotPorduct2D(Vec2D vec1, Vec2D vec2) {
 	return (vec1.x*vec2.x) + (vec1.y*vec2.y);
 }
 
+static inline Vec2D vecMult(Vec2D vec1, float val) {
+	return (Vec2D){vec1.x*val, vec1.y*val};
+}
+
 //Matrix
 
 
@@ -70,7 +74,7 @@ static inline void loadIdentity(float* mat4) {
 * Translates the given matrix by the given vec3
 * and frees the given matrix
 */
-static inline void translate(float* mat4, Vec2D vec) {
+static inline void translateMat(float* mat4, Vec2D vec) {
 
 	float z = 0; //no z-axis in 2D vector
 	float destMat4[16];
@@ -94,7 +98,7 @@ static inline void translate(float* mat4, Vec2D vec) {
 * scales the given matrix by the given vec3
 * and frees the given matix(parameter)
 */
-static inline void scale(float* mat4, float val) {
+static inline void scaleMat(float* mat4, float val) {
 
 	float destMat4[16];
 

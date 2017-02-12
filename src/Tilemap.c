@@ -1,4 +1,5 @@
 #include "Tilemap.h"
+#include "Shader.h"
 #include <stdio.h>
 #include <SOIL/SOIL.h>
 
@@ -22,9 +23,10 @@ Tilemap loadTiles(const char* bitMapFile) {
 	//breakdown the loaded bitmap in pixels 32x32 + 3 colors r,g,b
 	unsigned char (*pixels)[32][3] = (unsigned char (*)[32][3]) bitmap;
 
+
+	int ntile = 0, size = 100;
 	//allocate space for 100 tiles
-	Tile *tiles = (Tile *) malloc(sizeof(Tile)*100);
-	int ntile = 0, ctile = 0, size = 100;
+	Tile *tiles = (Tile *) malloc(sizeof(Tile)*size);
 
 	//iterate through the pixels and get r,g,b value of each pixel
 	for(int x = 0; x < 32; ++x)
@@ -39,24 +41,22 @@ Tilemap loadTiles(const char* bitMapFile) {
 				tile.pos.y = y;
 				tiles[ntile] = tile;
 				++ntile;
-				++ctile;
 			}
 
-			if(ntile >= 100) {
+			if(ntile >= size) {
 				size += 100;
 				tiles = (Tile *)realloc(tiles, sizeof(Tile)*size);
 				fprintf(stderr,"Reallocated total size: %ld\n", sizeof(Tile)*size);
-				ntile = 0;
 			}
 		}
 
-		printf("\nNo.of Tiles: %d\n", ctile);
+		printf("\nNo.of Tiles: %d\n", ntile);
 		fflush(stdout);
 
 	//create tilemap from da loaded data
 	Tilemap tilemap;
 	tilemap.tiles = tiles;
-	tilemap.nTiles = ctile;
+	tilemap.nTiles = ntile;
 
 	SOIL_free_image_data(bitmap);
 

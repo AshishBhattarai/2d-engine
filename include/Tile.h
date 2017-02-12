@@ -2,7 +2,7 @@
 #define TILE_H
 
 #include "GMath.h"
-#include "GL/gl.h"
+#include "GL/glew.h"
 
 typedef struct Tile Tile;
 
