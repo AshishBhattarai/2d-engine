@@ -22,8 +22,7 @@ static GLuint loadShader(const char *file, GLuint type) {
 	fseek(fp, 0, SEEK_END);
 	size = ftell(fp);
 	rewind(fp);
-
-	const char *source = (char*)malloc((size+1)*sizeof(float));
+	const char *source = (char*)malloc(size*sizeof(char)+1);
 
 	//read the file into the source
 	fread((char*)source, size, 1, fp);
@@ -74,8 +73,8 @@ void loadCompositeMatrix(float* mat4) {
 
 void shaders(const char* vertexFile, const char* fragmentFile) {
 	//loadShaders
-	GLuint vertex = loadShader(vertexFile, GL_VERTEX_SHADER);
 	GLuint fragment = loadShader(fragmentFile, GL_FRAGMENT_SHADER);
+	GLuint vertex = loadShader(vertexFile, GL_VERTEX_SHADER);
 
 	//create programs
 	program = glCreateProgram();

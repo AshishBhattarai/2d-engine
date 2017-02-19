@@ -36,16 +36,24 @@ Tilemap loadTiles(const char* bitMapFile) {
 			unsigned char g = pixels[x][y][1];
 			unsigned char b = pixels[x][y][2];
 
-			if(r==255) {
-				Tile tile;
-				tile.pos.x = x;
-				tile.pos.y = y;
-				tile.texture = loadTexture("3a.png");
-				tiles[ntile] = tile;
-				++ntile;
+			if(r==255 && g==0 && b==0) {
+					Tile tile;
+					tile.pos.x = x;
+					tile.pos.y = y;
+					tile.texture = loadTexture("t2.png");
+					tiles[ntile] = tile;
+					++ntile;
+
+			} else if(r==255 && g==0 && b==204) {
+					Tile tile;
+					tile.pos.x = x;
+					tile.pos.y = y;
+					tile.texture = loadTexture("t1.png");
+					tiles[ntile] = tile;
+					++ntile;
 			}
 
-			if(ntile >= size) {
+			if(ntile+3 >= size) {
 				size += 100;
 				tiles = (Tile *)realloc(tiles, sizeof(Tile)*size);
 				fprintf(stderr,"Reallocated total size: %ld\n", sizeof(Tile)*size);

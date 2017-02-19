@@ -2,23 +2,26 @@
 #include "Model.h"
 #include "Shader.h"
 #include "GMath.h"
+#include "Entity.h"
 #include <stdio.h>
 
 static Model model;
 static Tilemap tilemap;
 static GLuint bg;
 static float* compMat4;
-static float scale = 32.0f;
+static float scale = TILE_SIZE/2;
 static float WIDTH, HEIGHT;
 static float RATIO;
+Entity *Player;
 
 //load the game world
-void loadWorld(float w, float h, Level lvl) {
+void loadWorld(float w, float h, Level lvl, Entity *player) {
 
 	tilemap = lvl.map;
 	bg = lvl.bg;
 	WIDTH = w;
 	HEIGHT = h;
+	Player = player;
 
 	shaders("shaders/vertex.glsl", "shaders/fragment.glsl");
 	model = loadModel();
@@ -54,7 +57,8 @@ void prepOGL() {
 	glActiveTexture(GL_TEXTURE0);
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_CULL_FACE);
-
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	bindModel();
 	bindShader();
 }
@@ -65,6 +69,34 @@ void prepRender() {
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 }
 
+void renBackground() {
+	//backGround
+	compMat4 = createMat4(NULL);
+	loadIdentity(compMat4);
+	glBindTexture(GL_TEXTURE_2D, bg);
+	//translateMat(compMat4, (Vec2D){(0), (0)});
+	scale2DMat(compMat4,(Vec2D){(WIDTH/2*RATIO), (HEIGHT/2*RATIO)} );
+	loadCompositeMatrix(compMat4);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
+}
+
+void drawMap() {
+	//Render tilemap
+	for(int i = 0; i < tilemap.nTiles; ++i) {
+
+		loadIdentity(compMat4);
+
+		glBindTexture(GL_TEXTURE_2D, tilemap.tiles[i].texture);
+
+		translateMat(compMat4, (Vec2D){tilemap.tiles[i].pos.x * TILE_SIZE,
+									   tilemap.tiles[i].pos.y * TILE_SIZE});
+		scaleMat(compMat4, scale);
+		loadCompositeMatrix(compMat4);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+}
+
 //Render the world
 void renderWorld() {
 
@@ -73,31 +105,16 @@ void renderWorld() {
 		fprintf(stderr,"OpenGL error: %d\n", err);
     }
 
+	renBackground();
+	drawMap();
 
-	//backGround
-	compMat4 = createMat4(NULL);
+
+	//Entities
 	loadIdentity(compMat4);
-	glBindTexture(GL_TEXTURE_2D, bg);
-	translateMat(compMat4, (Vec2D){(WIDTH/2)*RATIO, (HEIGHT/2)*RATIO});
-	scale2DMat(compMat4,(Vec2D){(WIDTH/2)*RATIO, (HEIGHT/2)*RATIO} );
+	translateMat(compMat4, (Vec2D){Player->pos.x,Player->pos.y});
+	scaleMat(compMat4, scale);
 	loadCompositeMatrix(compMat4);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
-
-	//Render tilemap
-	for(int i = 0; i < tilemap.nTiles; ++i) {
-
-		loadIdentity(compMat4);
-
-		glBindTexture(GL_TEXTURE_2D, tilemap.tiles[i].texture);
-
-		translateMat(compMat4, (Vec2D){tilemap.tiles[i].pos.x * scale*2,
-									   tilemap.tiles[i].pos.y * scale*2});
-		scaleMat(compMat4, scale);
-		loadCompositeMatrix(compMat4);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
-
 }
 
 //cleanUp

@@ -86,6 +86,10 @@ void endLoop() {
 	glfwPollEvents();
 }
 
+bool isKeyPressed(int key) {
+	return glfwGetKey(window, key);
+}
+
 void displayCleanUp() {
 	glfwDestroyWindow(window);
 	glfwTerminate();

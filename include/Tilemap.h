@@ -4,6 +4,8 @@
 #include "GMath.h"
 #include "GL/glew.h"
 
+#define TILE_SIZE 64
+
 typedef struct Tile Tile;
 
 struct Tile {

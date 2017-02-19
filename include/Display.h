@@ -18,6 +18,9 @@ int getDelta();
 //Perform some operation at end of loop
 void endLoop();
 
+//check ke press
+bool isKeyPressed(int key);
+
 //Destroy the window
 void displayCleanUp();
 
