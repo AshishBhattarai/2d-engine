@@ -7,7 +7,8 @@
 #include <stdbool.h>
 
 #define SPEED 0.2f
-#define COLL_SIZE 128
+#define COLL_SIZE 128.0f
+#define GRAVITY 0.005f
 
 typedef struct Entity Entity;
 
@@ -16,8 +17,7 @@ struct Entity {
 	GLuint texture;
 };
 
-void moveEntity(Entity *entity, float valX, float valY);
-
-bool tileCollision(Entity entity, Tilemap map);
+//take movementValue applies gravity + collision & sets entities new position
+void moveEntity(Vec2D *movVal, Entity *entity, Tilemap map, float delta);
 
 #endif

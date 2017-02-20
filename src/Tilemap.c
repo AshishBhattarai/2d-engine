@@ -41,6 +41,7 @@ Tilemap loadTiles(const char* bitMapFile) {
 					tile.pos.x = x;
 					tile.pos.y = y;
 					tile.texture = loadTexture("t2.png");
+					tile.rigid = 1;
 					tiles[ntile] = tile;
 					++ntile;
 
@@ -49,6 +50,7 @@ Tilemap loadTiles(const char* bitMapFile) {
 					tile.pos.x = x;
 					tile.pos.y = y;
 					tile.texture = loadTexture("t1.png");
+					tile.rigid = 0;
 					tiles[ntile] = tile;
 					++ntile;
 			}

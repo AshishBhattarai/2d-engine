@@ -7,7 +7,7 @@
 GLuint program;
 
 //location of projection matrix &composite matrix in shaders
-GLuint locProjection, locComposite;
+GLint locProjection, locComposite;
 
 static GLuint loadShader(const char *file, GLuint type) {
 
@@ -22,16 +22,17 @@ static GLuint loadShader(const char *file, GLuint type) {
 	fseek(fp, 0, SEEK_END);
 	size = ftell(fp);
 	rewind(fp);
-	const char *source = (char*)malloc(size*sizeof(char)+1);
+	char *source = (char*)malloc(size*sizeof(char)+1);
 
 	//read the file into the source
 	fread((char*)source, size, 1, fp);
 
  	fclose(fp);
+	source[size] = '\0';
 
 	//Create - Link Source - Compile Shader
 	GLuint shader = glCreateShader(type);
-	glShaderSource(shader, 1, &source, NULL);
+	glShaderSource(shader, 1, (const GLchar *const*)&source, NULL);
 	glCompileShader(shader);
 
 	free((char*)source); //free source data

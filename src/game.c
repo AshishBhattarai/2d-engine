@@ -10,26 +10,26 @@
 #define WIDTH 1280
 #define HEIGHT 720
 
+Vec2D movement;
 
-void pMovement(Entity *player) {
+void pMovement(Entity *player, Tilemap map) {
 	if(isKeyPressed(GLFW_KEY_W)) {
-		player->pos.y += SPEED*getDelta();
+		movement.y += SPEED;
 	}
 
 	if(isKeyPressed(GLFW_KEY_S)) {
-		player->pos.y -= SPEED*getDelta();
+		movement.y -= SPEED;
 	}
 
 	if(isKeyPressed(GLFW_KEY_A)) {
-		player->pos.x -= SPEED*getDelta();
+		movement.x -= SPEED;
 	}
 
 	if(isKeyPressed(GLFW_KEY_D)) {
-		player->pos.x += SPEED*getDelta();
+		movement.x += SPEED;
 	}
 
-	player->pos.x += 0;
-	player->pos.y += 0;
+	moveEntity(&movement, player, map, getDelta());
 }
 
 int main() {
@@ -42,7 +42,9 @@ int main() {
 
 	Entity player;
 	player.pos.x = 0;
-	player.pos.y = 0;
+	player.pos.y = 500;
+	movement.x = 0;
+	movement.y = 0;
 
 	loadWorld(WIDTH, HEIGHT, lvl1, &player);
 
@@ -51,11 +53,9 @@ int main() {
 		startLoop();
 		prepRender();
 		renderWorld();
-		pMovement(&player);
 
-		//collision check
-		int coll = tileCollision(player, lvl1.map);
-		printf("%d\n", coll);
+		pMovement(&player, lvl1.map);
+
 		endLoop();
 	}
 

@@ -3,6 +3,7 @@
 
 #include "GMath.h"
 #include "GL/glew.h"
+#include <stdbool.h>
 
 #define TILE_SIZE 64
 
@@ -11,6 +12,7 @@ typedef struct Tile Tile;
 struct Tile {
 	Vec2D pos;
 	GLuint texture;
+	bool rigid;
 };
 
 typedef struct Tilemap Tilemap;
