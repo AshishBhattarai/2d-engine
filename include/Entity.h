@@ -7,14 +7,18 @@
 #include <stdbool.h>
 
 #define SPEED 0.2f
-#define COLL_SIZE 128.0f
-#define GRAVITY 0.005f
+#define COLL_SIZE 60.0f
+#define OFF_SET 32.0f //Collision offset for entity X-axis
+#define GRAVITY 0.001f
+#define JUMP .5f //.6f
 
 typedef struct Entity Entity;
 
 struct Entity {
 	Vec2D pos;
 	GLuint texture;
+	bool jumpCd;
+	bool canjump;
 };
 
 //take movementValue applies gravity + collision & sets entities new position

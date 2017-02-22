@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 //Creates a display with given width, height & title
-void createDisplay(int w, int h, const char* title);
+void createDisplay(int w, int h, char* title);
 
 //Returns if close flage is set or not
 bool shouldCloseWindow();

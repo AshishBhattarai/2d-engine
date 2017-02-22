@@ -34,8 +34,8 @@ static void calcDelta() {
 //public functions
 
 //function create a display window
-void createDisplay(int w, int h, const char* title) {
-	wTitle = strdup(title);
+void createDisplay(int w, int h, char* title) {
+	wTitle = title;
 	glfwSetErrorCallback(errorCallback);
 	if(!glfwInit()) {
 		glfwTerminate();

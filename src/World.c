@@ -27,7 +27,7 @@ void loadWorld(float w, float h, Level lvl, Entity *player) {
 	model = loadModel();
 
 	RATIO = w/h;
-	float* proj = loadOrtho(0.0, w*RATIO, 0.0, h*RATIO, -1.0f, 1.0f);
+	float* proj = loadOrtho(0.0, w, 0.0, h, -1.0f, 1.0f);
 
 	bindShader();
 	loadProjectionMatrix(proj);
@@ -75,7 +75,7 @@ void renBackground() {
 	loadIdentity(compMat4);
 	glBindTexture(GL_TEXTURE_2D, bg);
 	//translateMat(compMat4, (Vec2D){(0), (0)});
-	scale2DMat(compMat4,(Vec2D){(WIDTH/2*RATIO), (HEIGHT/2*RATIO)} );
+	scale2DMat(compMat4,(Vec2D){(WIDTH/2), (HEIGHT/2)} );
 	loadCompositeMatrix(compMat4);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
 }
@@ -114,7 +114,9 @@ void renderWorld() {
 	translateMat(compMat4, (Vec2D){Player->pos.x,Player->pos.y});
 	scaleMat(compMat4, scale);
 	loadCompositeMatrix(compMat4);
+	glBindTexture(GL_TEXTURE_2D, Player->texture);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 //cleanUp

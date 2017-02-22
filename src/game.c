@@ -14,14 +14,18 @@ Vec2D movement;
 
 void pMovement(Entity *player, Tilemap map) {
 	if(isKeyPressed(GLFW_KEY_W)) {
-		movement.y += SPEED;
+		if(player->canjump) {
+			movement.y += JUMP;
+			player->canjump = 0;
+		}
 	}
 
 	if(isKeyPressed(GLFW_KEY_S)) {
-		movement.y -= SPEED;
+		// movement.y -= SPEED;
 	}
 
 	if(isKeyPressed(GLFW_KEY_A)) {
+
 		movement.x -= SPEED;
 	}
 
@@ -43,8 +47,8 @@ int main() {
 	Entity player;
 	player.pos.x = 0;
 	player.pos.y = 500;
-	movement.x = 0;
-	movement.y = 0;
+	player.texture = loadTexture("wizard.png");
+
 
 	loadWorld(WIDTH, HEIGHT, lvl1, &player);
 
