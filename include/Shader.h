@@ -20,6 +20,8 @@ void loadCompositeMatrix(float* mat4);
 
 void loadProjectionMatrix(float* proj);
 
+void loadViewMatrix(float* view);
+
 void setFacing(bool bol);
 
 #endif

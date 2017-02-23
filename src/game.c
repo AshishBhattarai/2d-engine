@@ -48,7 +48,7 @@ int main() {
 
 	Entity player = entityDef;
 	player.pos.x = 0;
-	player.pos.y = 600;
+	player.pos.y = 200;
 	player.texture = loadTexture("wizard.png");
 
 

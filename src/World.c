@@ -12,6 +12,7 @@ static float* compMat4;
 static float scale = TILE_SIZE/2;
 static float WIDTH, HEIGHT;
 static float RATIO;
+static Vec2D camera;
 Entity *Player;
 
 //load the game world
@@ -34,6 +35,22 @@ void loadWorld(float w, float h, Level lvl, Entity *player) {
 	unBindShader();
 
 	free(proj);
+}
+
+void updateCamera() {
+	loadIdentity(compMat4);
+
+	if(Player->pos.x > WIDTH/2) {
+		camera.x = (Player->pos.x-WIDTH/2);
+		translateMat(compMat4, (Vec2D){-camera.x, 0.0});
+	}
+
+	if(Player->pos.y > HEIGHT/2) {
+		camera.y = (Player->pos.y-HEIGHT/2);
+		translateMat(compMat4, (Vec2D){0.0, -camera.y});
+	}
+
+	loadViewMatrix(compMat4);
 }
 
 void bindModel() {
@@ -75,6 +92,7 @@ void renBackground() {
 	//backGround
 	compMat4 = createMat4(NULL);
 	loadIdentity(compMat4);
+	loadViewMatrix(compMat4);
 	glBindTexture(GL_TEXTURE_2D, bg);
 	//translateMat(compMat4, (Vec2D){(0), (0)});
 	scale2DMat(compMat4,(Vec2D){(WIDTH/2), (HEIGHT/2)} );
@@ -108,8 +126,10 @@ void renderWorld() {
     }
 
 	renBackground();
-	drawMap();
 
+	updateCamera();
+
+	drawMap();
 
 	//Entities
 	loadIdentity(compMat4);
@@ -129,4 +149,5 @@ void worldCleanUp() {
 	free(compMat4);
 	freeMap(&tilemap);
 	shaderCleanUp();
+	fprintf(stderr,"World Destroyed.\n");
 }
