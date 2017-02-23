@@ -27,10 +27,12 @@ void pMovement(Entity *player, Tilemap map) {
 	if(isKeyPressed(GLFW_KEY_A)) {
 
 		movement.x -= SPEED;
+		player->facing = false;
 	}
 
 	if(isKeyPressed(GLFW_KEY_D)) {
 		movement.x += SPEED;
+		player->facing = true;
 	}
 
 	moveEntity(&movement, player, map, getDelta());
@@ -44,9 +46,9 @@ int main() {
 	lvl1.map = loadTiles("tilemap.png"); //t1 - 90 C-CW - Flip Horizontally - Flip V
 	lvl1.bg = loadTexture("back.png");
 
-	Entity player;
+	Entity player = entityDef;
 	player.pos.x = 0;
-	player.pos.y = 500;
+	player.pos.y = 600;
 	player.texture = loadTexture("wizard.png");
 
 

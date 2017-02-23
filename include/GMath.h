@@ -11,14 +11,11 @@
  * Supports 3D & 2D Vectors
 */
 
-typedef struct vec2 Vec2D;
-
 //Vector
-struct vec2 {
+typedef struct {
 	float x;
 	float y;
-};
-
+} Vec2D;
 
 static inline float magnitude2D(Vec2D vec) {
 	return sqrt(vec.x*vec.x + vec.y*vec.y);

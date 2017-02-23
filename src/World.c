@@ -23,8 +23,8 @@ void loadWorld(float w, float h, Level lvl, Entity *player) {
 	HEIGHT = h;
 	Player = player;
 
-	shaders("shaders/vertex.glsl", "shaders/fragment.glsl");
 	model = loadModel();
+	shaders("shaders/vertex.glsl", "shaders/fragment.glsl");
 
 	RATIO = w/h;
 	float* proj = loadOrtho(0.0, w, 0.0, h, -1.0f, 1.0f);
@@ -40,12 +40,14 @@ void bindModel() {
 	glBindVertexArray(model.vaoID);
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.indiID);
 
 }
 
 void unBindModel() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glDisableVertexAttribArray(2);
 	glDisableVertexAttribArray(1);
 	glDisableVertexAttribArray(0);
 	glBindVertexArray(0);
@@ -99,7 +101,7 @@ void drawMap() {
 
 //Render the world
 void renderWorld() {
-
+	setFacing(true); //texture facing false - back -- true - front
 	GLenum err;
     while ((err = glGetError()) != GL_NO_ERROR) {
 		fprintf(stderr,"OpenGL error: %d\n", err);
@@ -115,6 +117,7 @@ void renderWorld() {
 	scaleMat(compMat4, scale);
 	loadCompositeMatrix(compMat4);
 	glBindTexture(GL_TEXTURE_2D, Player->texture);
+	setFacing(Player->facing);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

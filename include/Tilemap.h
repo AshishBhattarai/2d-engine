@@ -7,20 +7,16 @@
 
 #define TILE_SIZE 64
 
-typedef struct Tile Tile;
-
-struct Tile {
+typedef struct {
 	Vec2D pos;
 	GLuint texture;
 	bool rigid;
-};
+} Tile;
 
-typedef struct Tilemap Tilemap;
-
-struct Tilemap {
+typedef struct {
 	Tile* tiles;
 	int nTiles;
-};
+} Tilemap;
 
 //uses bitmap to load tiles coordinates to any array of Tile
 Tilemap loadTiles(const char* bitMapFile);

@@ -4,10 +4,10 @@
 #include <GL/glew.h>
 
 
-GLuint program;
+static GLuint program;
 
 //location of projection matrix &composite matrix in shaders
-GLint locProjection, locComposite;
+static GLint locProjection, locComposite, facing;
 
 static GLuint loadShader(const char *file, GLuint type) {
 
@@ -58,10 +58,15 @@ static GLuint loadShader(const char *file, GLuint type) {
 static void getAllUniformLocs() {
 	locProjection = glGetUniformLocation(program, "projectionMatrix");
 	locComposite = glGetUniformLocation(program, "compositeMatrix");
+	facing = glGetUniformLocation(program, "facing");
 }
 
 static void loadMatrix(GLuint location, float* mat4) {
 	glUniformMatrix4fv(location, 1, GL_FALSE, mat4);
+}
+
+static void loadBool(GLuint location, bool bol) {
+	glUniform1i(location, bol);
 }
 
 void loadProjectionMatrix(float* proj) {
@@ -70,6 +75,10 @@ void loadProjectionMatrix(float* proj) {
 
 void loadCompositeMatrix(float* mat4) {
 	loadMatrix(locComposite, mat4);
+}
+
+void setFacing(bool bol) {
+	loadBool(facing, bol);
 }
 
 void shaders(const char* vertexFile, const char* fragmentFile) {
@@ -85,6 +94,7 @@ void shaders(const char* vertexFile, const char* fragmentFile) {
 	//Bind attributes
 	glBindAttribLocation(program, 0, "vertexPos");
 	glBindAttribLocation(program, 1, "textCoords");
+	glBindAttribLocation(program, 2, "textCoords2");
 
 	glLinkProgram(program);
 	glValidateProgram(program);

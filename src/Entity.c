@@ -5,7 +5,7 @@ Vec2D oldPos;
 
 static inline int compareVec2D(Vec2D vec1, Vec2D vec2) {
 	if((vec1.x+COLL_SIZE-OFF_SET >= vec2.x) && (vec1.y+COLL_SIZE >= vec2.y) &&
-		((vec1.x-COLL_SIZE <= vec2.x) && (vec1.y-COLL_SIZE<= vec2.y))) {
+		((vec1.x-COLL_SIZE+OFF_SET <= vec2.x) && (vec1.y-COLL_SIZE<= vec2.y))) {
 		return 1;
 	} else
 		return 0;

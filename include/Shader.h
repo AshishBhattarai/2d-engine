@@ -2,6 +2,7 @@
 #define SHADER_H
 
 #include "GMath.h"
+#include <stdbool.h>
 
 //Loades vertex, fragment shader
 void shaders(const char* vertexFile, const char* fragmentFile);
@@ -19,5 +20,6 @@ void loadCompositeMatrix(float* mat4);
 
 void loadProjectionMatrix(float* proj);
 
+void setFacing(bool bol);
 
 #endif

@@ -5,11 +5,9 @@
 #include "Tilemap.h"
 #include "GL/gl.h"
 
-typedef struct level Level;
-
-struct level {
+typedef struct {
 	Tilemap map;
 	GLuint bg;
-};
+} Level;
 
 #endif
