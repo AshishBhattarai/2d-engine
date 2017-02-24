@@ -12,13 +12,16 @@
 
 Vec2D movement;
 
+static int oldState = GLFW_RELEASE;
+
 void pMovement(Entity *player, Tilemap map) {
-	if(isKeyPressed(GLFW_KEY_W)) {
+	if(isKeyPressed(GLFW_KEY_W) && oldState == GLFW_RELEASE) {
 		if(player->canjump) {
 			movement.y += JUMP;
 			player->canjump = 0;
 		}
 	}
+	oldState = isKeyPressed(GLFW_KEY_W);
 
 	if(isKeyPressed(GLFW_KEY_S)) {
 		// movement.y -= SPEED;

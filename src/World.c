@@ -40,12 +40,12 @@ void loadWorld(float w, float h, Level lvl, Entity *player) {
 void updateCamera() {
 	loadIdentity(compMat4);
 
-	if(Player->pos.x > WIDTH/2) {
+	if(Player->pos.x >= WIDTH/2) {
 		camera.x = (Player->pos.x-WIDTH/2);
 		translateMat(compMat4, (Vec2D){-camera.x, 0.0});
 	}
 
-	if(Player->pos.y > HEIGHT/2) {
+	if(Player->pos.y >= HEIGHT/2) {
 		camera.y = (Player->pos.y-HEIGHT/2);
 		translateMat(compMat4, (Vec2D){0.0, -camera.y});
 	}

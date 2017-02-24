@@ -64,7 +64,7 @@ void createDisplay(int w, int h, char* title) {
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
-
+	glfwGetFramebufferSize(window, &w, &h);
 	glViewport(0, 0, w, h);
 }
 
