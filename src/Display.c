@@ -7,8 +7,8 @@
 
 static GLFWwindow* window;
 static char* wTitle;
-static int fpsCnt =0, lastCount = 0;
-static int lastFrame, delta = 0;
+static int fpsCnt = 0, lastFrame = 0;
+static float lastCount = 0, delta = 0;
 
 //private functions
 static void errorCallback(int error, const char* description) {
@@ -77,7 +77,7 @@ void startLoop() {
 	calcDelta();
 }
 
-int getDelta() {
+float getDelta() {
 	return delta;
 }
 

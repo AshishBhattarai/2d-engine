@@ -11,6 +11,18 @@ static inline int compareVec2D(Vec2D vec1, Vec2D vec2) {
 		return 0;
 }
 
+Entity initEntity(Vec2D pos, SpriteSheet spriteSheet) {
+
+	Entity entity;
+	entity.pos = pos;
+	entity.animation = initAnimation(spriteSheet);
+	entity.facing = true;
+	entity.jumpCd = false;
+	entity.canjump = false;
+
+	return entity;
+}
+
 bool tileCollision(Entity entity, Tilemap map) {
 
 	Vec2D tilePos;

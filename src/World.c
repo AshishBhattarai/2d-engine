@@ -120,6 +120,9 @@ void drawMap() {
 //Render the world
 void renderWorld() {
 	setFacing(true); //texture facing false - back -- true - front
+	loadFrame(0, 0);
+	loadSpriteSize(1,1);
+
 	GLenum err;
     while ((err = glGetError()) != GL_NO_ERROR) {
 		fprintf(stderr,"OpenGL error: %d\n", err);
@@ -136,8 +139,14 @@ void renderWorld() {
 	translateMat(compMat4, (Vec2D){Player->pos.x,Player->pos.y});
 	scaleMat(compMat4, scale);
 	loadCompositeMatrix(compMat4);
-	glBindTexture(GL_TEXTURE_2D, Player->texture);
+
+	//sprite sheet animation
+	glBindTexture(GL_TEXTURE_2D, Player->animation.spriteSheet.texture);
 	setFacing(Player->facing);
+	animate(&Player->animation, WALKING);
+	loadFrame(Player->animation.frame.x, Player->animation.frame.y);
+	loadSpriteSize(Player->animation.spriteSheet.spriteSize.x,
+				   Player->animation.spriteSheet.spriteSize.y);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

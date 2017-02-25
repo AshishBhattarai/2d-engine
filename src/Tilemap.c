@@ -1,6 +1,6 @@
 #include "Tilemap.h"
 #include "Shader.h"
-#include "Texture.h"
+#include "SpriteSheet.h"
 #include <stdio.h>
 #include <SOIL/SOIL.h>
 

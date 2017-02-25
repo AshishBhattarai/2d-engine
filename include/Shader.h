@@ -22,6 +22,10 @@ void loadProjectionMatrix(float* proj);
 
 void loadViewMatrix(float* view);
 
+void loadFrame(float x, float y);
+
+void loadSpriteSize(float x, float y);
+
 void setFacing(bool bol);
 
 #endif

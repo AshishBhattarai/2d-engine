@@ -13,7 +13,7 @@ bool shouldCloseWindow();
 void startLoop();
 
 //Get the valude of delta
-int getDelta();
+float getDelta();
 
 //Perform some operation at end of loop
 void endLoop();

@@ -1,8 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "GMath.h"
-#include "Texture.h"
+#include "Animation.h"
 #include "Tilemap.h"
 #include <stdbool.h>
 
@@ -15,21 +14,14 @@
 
 typedef struct  {
 	Vec2D pos;
-	GLuint texture;
+	Animation animation;
 	bool facing;
 	bool jumpCd;
 	bool canjump;
 } Entity;
 
-
-static const Entity entityDef = {
-	.pos.x = 0,
-	.pos.y = 0,
-	.texture = 0,
-	.facing = true,
-	.jumpCd = false,
-	.canjump = false
-};
+//Initialize Entity
+Entity initEntity(Vec2D pos, SpriteSheet spriteSheet);
 
 //take movementValue applies gravity + collision & sets entities new position
 void moveEntity(Vec2D *movVal, Entity *entity, Tilemap map, float delta);

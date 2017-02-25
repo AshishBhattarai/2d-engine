@@ -7,7 +7,7 @@
 static GLuint program;
 
 //location of projection matrix &composite matrix in shaders
-static GLint locProjection, locComposite, locView, facing;
+static GLint locProjection, locComposite, locView, locFrame, locSpriteSize, facing;
 
 static GLuint loadShader(const char *file, GLuint type) {
 
@@ -59,6 +59,8 @@ static void getAllUniformLocs() {
 	locProjection = glGetUniformLocation(program, "projectionMatrix");
 	locComposite = glGetUniformLocation(program, "compositeMatrix");
 	locView = glGetUniformLocation(program, "viewMatrix");
+	locFrame = glGetUniformLocation(program, "frame");
+	locSpriteSize = glGetUniformLocation(program, "spriteSize");
 	facing = glGetUniformLocation(program, "facing");
 }
 
@@ -70,6 +72,11 @@ static void loadBool(GLuint location, bool bol) {
 	glUniform1i(location, bol);
 }
 
+static void loadVec2D(GLuint location, float x, float y) {
+	glUniform2f(location, x, y);
+}
+
+//UniformLoaders
 void loadProjectionMatrix(float* proj) {
 	loadMatrix(locProjection, proj);
 }
@@ -80,6 +87,14 @@ void loadCompositeMatrix(float* mat4) {
 
 void loadViewMatrix(float* view) {
 	loadMatrix(locView, view);
+}
+
+void loadFrame(float x, float y) {
+	loadVec2D(locFrame, x, y);
+}
+
+void loadSpriteSize(float x, float y) {
+	loadVec2D(locSpriteSize, x, y);
 }
 
 void setFacing(bool bol) {
