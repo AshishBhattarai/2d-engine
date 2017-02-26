@@ -25,20 +25,15 @@ Entity initEntity(Vec2D pos, SpriteSheet spriteSheet) {
 
 bool tileCollision(Entity entity, Tilemap map) {
 
-	Vec2D tilePos;
 	bool xOverlaps = false, yOverlaps = false, collision = false;
 	for(int i = 0; i < map.nTiles; ++i ) {
 		//Check collision only for rigid tiles
 		if(map.tiles[i].rigid) {
-			//map.tiles[i].pos.x*TILE_SIZE - Gives tile postion in da world
-			tilePos.x = map.tiles[i].pos.x*TILE_SIZE;
-			tilePos.y = map.tiles[i].pos.y*TILE_SIZE;
-
-			if(compareVec2D(entity.pos, tilePos)) {
-				xOverlaps = entity.pos.x <= tilePos.x+COLL_SIZE &&
-							entity.pos.x+COLL_SIZE >= tilePos.x;
-				yOverlaps = entity.pos.y <= tilePos.y+COLL_SIZE &&
-							entity.pos.y+COLL_SIZE >= tilePos.y;
+			if(compareVec2D(entity.pos, map.tiles[i].pos)) {
+				xOverlaps = entity.pos.x <= map.tiles[i].pos.x+COLL_SIZE &&
+							entity.pos.x+COLL_SIZE >= map.tiles[i].pos.x;
+				yOverlaps = entity.pos.y <= map.tiles[i].pos.y+COLL_SIZE &&
+							entity.pos.y+COLL_SIZE >= map.tiles[i].pos.y;
 
 			collision = xOverlaps && yOverlaps;
 			}

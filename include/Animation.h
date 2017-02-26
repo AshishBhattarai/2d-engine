@@ -20,6 +20,6 @@ typedef struct {
 //Initialize Animation
 Animation initAnimation(SpriteSheet spriteSheet);
 
-void animate(Animation *animation, int mode);
+void animate(Animation *animation);
 
 #endif

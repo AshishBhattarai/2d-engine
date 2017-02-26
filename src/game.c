@@ -51,7 +51,10 @@ int main() {
 	createDisplay(WIDTH, HEIGHT, "2D-Engine");
 
 	Level lvl1;
-	lvl1.map = loadTiles("tilemap.png"); //t1 - 90 C-CW - Flip Horizontally - Flip V
+	SpriteSheet tileSheet = loadSpriteSheet("tilesheet.png", (Vec2D){64,64},
+											(Vec2D){128,64});
+	//t1 - 90 C-CW - Flip Horizontally - Flip V
+	lvl1.map = loadTilemap("tilemap.png", tileSheet);
 	lvl1.bg = loadTexture("back.png");
 
 	SpriteSheet playerSprite = loadSpriteSheet("sprites.png", (Vec2D){64,64},

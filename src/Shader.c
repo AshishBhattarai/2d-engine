@@ -89,12 +89,12 @@ void loadViewMatrix(float* view) {
 	loadMatrix(locView, view);
 }
 
-void loadFrame(float x, float y) {
-	loadVec2D(locFrame, x, y);
+void loadFrame(Vec2D frame) {
+	loadVec2D(locFrame, frame.x, frame.y);
 }
 
-void loadSpriteSize(float x, float y) {
-	loadVec2D(locSpriteSize, x, y);
+void loadSpriteSize(Vec2D size) {
+	loadVec2D(locSpriteSize, size.x, size.y);
 }
 
 void setFacing(bool bol) {

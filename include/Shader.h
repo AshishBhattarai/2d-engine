@@ -22,9 +22,9 @@ void loadProjectionMatrix(float* proj);
 
 void loadViewMatrix(float* view);
 
-void loadFrame(float x, float y);
+void loadFrame(Vec2D frame);
 
-void loadSpriteSize(float x, float y);
+void loadSpriteSize(Vec2D size);
 
 void setFacing(bool bol);
 

@@ -14,7 +14,7 @@ Animation initAnimation(SpriteSheet spriteSheet) {
 	return animation;
 }
 
-void animate(Animation *animation, int mode) {
+void animate(Animation *animation) {
 
 	if((glfwGetTime() - animation->lastFrame) > AFPS) {
 

@@ -1,14 +1,30 @@
 #include "Tilemap.h"
 #include "Shader.h"
-#include "SpriteSheet.h"
 #include <stdio.h>
 #include <SOIL/SOIL.h>
 
 #define MAP_WIDTH 256
 #define MAP_HEIGHT 32
 
+static Tile createTile(int x, int y, int spriteX, int  spriteY,
+					   bool rigid, bool animate) {
+
+	Tile tile;
+	tile.pos.x = x*TILE_SIZE;
+	tile.pos.y = y*TILE_SIZE;
+	tile.sprite.x = spriteX;
+	tile.sprite.y = spriteY;
+	tile.rigid = rigid;
+	tile.animate = animate;
+	return tile;
+}
+
 //uses bitmap to load tiles coordinates to any array of Tile
-Tilemap loadTiles(const char* bitMapFile) {
+Tilemap loadTilemap(const char* bitMapFile, SpriteSheet spriteSheet) {
+
+
+	Tilemap tilemap;
+	tilemap.spriteSheet = spriteSheet;
 
 	int width, height;
 	//load da bitmap
@@ -32,33 +48,35 @@ Tilemap loadTiles(const char* bitMapFile) {
 	//allocate space for 100 tiles
 	Tile *tiles = (Tile *) malloc(sizeof(Tile)*size);
 
+	//pre create spriteSheet & animationFor Coin
+	SpriteSheet coinSheet = loadSpriteSheet("coin.png", (Vec2D){32,32},
+											(Vec2D){192, 32});
+	Animation coinAnimation = initAnimation(coinSheet);
+
 	//iterate through the pixels and get r,g,b value of each pixel
 	for(int x = 0; x < MAP_WIDTH; ++x)
-		for(int y = 0; y < MAP_HEIGHT	; ++y) {
+		for(int y = 0; y < MAP_HEIGHT; ++y) {
 			unsigned char r = pixels[x][y][0];
 			unsigned char g = pixels[x][y][1];
 			unsigned char b = pixels[x][y][2];
 
 			if(r==255 && g==0 && b==0) {
-					Tile tile;
-					tile.pos.x = x;
-					tile.pos.y = y;
-					tile.texture = loadTexture("t2.png");
-					tile.rigid = 1;
-					tiles[ntile] = tile;
+
+					tiles[ntile] = createTile(x, y, 0, 0, true, false);
 					++ntile;
 
 			} else if(r==255 && g==0 && b==204) {
-					Tile tile;
-					tile.pos.x = x;
-					tile.pos.y = y;
-					tile.texture = loadTexture("t1.png");
-					tile.rigid = 0;
-					tiles[ntile] = tile;
+
+					tiles[ntile] = createTile(x, y, 1, 0, false, false);
 					++ntile;
+			} else if(r==100 && g==100 && b==0) {
+
+				tiles[ntile] = createTile(x, y, 0, 0, false, true);
+				tiles[ntile].animation = coinAnimation;
+				++ntile;
 			}
 
-			if(ntile+3 >= size) {
+			if(ntile+4 >= size) { //ntile + no.of unique tiles+1
 				size += 100;
 				tiles = (Tile *)realloc(tiles, sizeof(Tile)*size);
 				fprintf(stderr,"Reallocated total size: %ld\n", sizeof(Tile)*size);
@@ -71,7 +89,6 @@ Tilemap loadTiles(const char* bitMapFile) {
 		fflush(stdout);
 
 	//create tilemap from da loaded data
-	Tilemap tilemap;
 	tilemap.tiles = tiles;
 	tilemap.nTiles = ntile;
 

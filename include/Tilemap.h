@@ -3,23 +3,28 @@
 
 #include "GMath.h"
 #include "GL/glew.h"
+#include "SpriteSheet.h"
+#include "Animation.h"
 #include <stdbool.h>
 
 #define TILE_SIZE 64
 
 typedef struct {
 	Vec2D pos;
-	GLuint texture;
+	Vec2D sprite;
+	Animation animation;
 	bool rigid;
+	bool animate;
 } Tile;
 
 typedef struct {
 	Tile* tiles;
+	SpriteSheet spriteSheet;
 	int nTiles;
 } Tilemap;
 
 //uses bitmap to load tiles coordinates to any array of Tile
-Tilemap loadTiles(const char* bitMapFile);
+Tilemap loadTilemap(const char* bitMapFile, SpriteSheet spriteSheet);
 
 //free the loaded tiles
 void freeMap(Tilemap* map);

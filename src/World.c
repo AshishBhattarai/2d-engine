@@ -105,12 +105,23 @@ void drawMap() {
 	for(int i = 0; i < tilemap.nTiles; ++i) {
 
 		loadIdentity(compMat4);
+		translateMat(compMat4, (Vec2D){tilemap.tiles[i].pos.x,
+									   tilemap.tiles[i].pos.y});
+		if(!tilemap.tiles[i].animate) {
+			glBindTexture(GL_TEXTURE_2D, tilemap.spriteSheet.texture);
+			loadSpriteSize(tilemap.spriteSheet.spriteSize);
+			loadFrame(getSprite(tilemap.spriteSheet, tilemap.tiles[i].sprite.x,
+								tilemap.tiles[i].sprite.y));
+			scaleMat(compMat4, scale);
+		} else {
+			glBindTexture(GL_TEXTURE_2D,
+						  tilemap.tiles[i].animation.spriteSheet.texture);
+			loadSpriteSize(tilemap.tiles[i].animation.spriteSheet.spriteSize);
+			animate(&tilemap.tiles[i].animation);
+			loadFrame(tilemap.tiles[i].animation.frame);
+			scaleMat(compMat4, scale/2);
+		}
 
-		glBindTexture(GL_TEXTURE_2D, tilemap.tiles[i].texture);
-
-		translateMat(compMat4, (Vec2D){tilemap.tiles[i].pos.x * TILE_SIZE,
-									   tilemap.tiles[i].pos.y * TILE_SIZE});
-		scaleMat(compMat4, scale);
 		loadCompositeMatrix(compMat4);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
 		glBindTexture(GL_TEXTURE_2D, 0);
@@ -120,8 +131,8 @@ void drawMap() {
 //Render the world
 void renderWorld() {
 	setFacing(true); //texture facing false - back -- true - front
-	loadFrame(0, 0);
-	loadSpriteSize(1,1);
+	loadFrame((Vec2D){0, 0});
+	loadSpriteSize((Vec2D){1, 1});
 
 	GLenum err;
     while ((err = glGetError()) != GL_NO_ERROR) {
@@ -143,10 +154,9 @@ void renderWorld() {
 	//sprite sheet animation
 	glBindTexture(GL_TEXTURE_2D, Player->animation.spriteSheet.texture);
 	setFacing(Player->facing);
-	animate(&Player->animation, WALKING);
-	loadFrame(Player->animation.frame.x, Player->animation.frame.y);
-	loadSpriteSize(Player->animation.spriteSheet.spriteSize.x,
-				   Player->animation.spriteSheet.spriteSize.y);
+	animate(&Player->animation);
+	loadFrame(Player->animation.frame);
+	loadSpriteSize(Player->animation.spriteSheet.spriteSize);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
