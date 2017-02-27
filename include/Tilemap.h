@@ -23,10 +23,4 @@ typedef struct {
 	int nTiles;
 } Tilemap;
 
-//uses bitmap to load tiles coordinates to any array of Tile
-Tilemap loadTilemap(const char* bitMapFile, SpriteSheet spriteSheet);
-
-//free the loaded tiles
-void freeMap(Tilemap* map);
-
 #endif

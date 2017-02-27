@@ -1,9 +1,8 @@
 #include "Display.h"
 #include "SpriteSheet.h"
 #include "World.h"
-#include "Tilemap.h"
 #include "Level.h"
-#include "Entity.h"
+#include "Tilemap.h"
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 
@@ -46,6 +45,7 @@ void pMovement(Entity *player, Tilemap map) {
 	moveEntity(&movement, player, map, getDelta());
 }
 
+
 int main() {
 
 	createDisplay(WIDTH, HEIGHT, "2D-Engine");
@@ -54,26 +54,29 @@ int main() {
 	SpriteSheet tileSheet = loadSpriteSheet("tilesheet.png", (Vec2D){64,64},
 											(Vec2D){128,64});
 	//t1 - 90 C-CW - Flip Horizontally - Flip V
-	lvl1.map = loadTilemap("tilemap.png", tileSheet);
-	lvl1.bg = loadTexture("back.png");
+	lvl1 = loadTilemap("tilemap.png", "back.png", tileSheet);
 
 	SpriteSheet playerSprite = loadSpriteSheet("sprites.png", (Vec2D){64,64},
 												(Vec2D){384, 128});
 	Entity player = initEntity((Vec2D){0, 200}, playerSprite);
 
-	loadWorld(WIDTH, HEIGHT, lvl1, &player);
+	loadWorld(WIDTH, HEIGHT, &player);
 
 	prepOGL();
 	while(!shouldCloseWindow()) {
 		startLoop();
 		prepRender();
-		renderWorld();
+		renderWorld(&lvl1);
 
 		pMovement(&player, lvl1.map);
+		for(int i = 0; i < lvl1.nEnemies; ++i) {
+			activateEnemy(&lvl1.enemies[i], lvl1.map, getDelta());
+		}
 
 		endLoop();
 	}
 
+	freelvl(lvl1);
 	worldCleanUp();
 	displayCleanUp();
 }

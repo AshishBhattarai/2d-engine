@@ -6,8 +6,6 @@
 #include <stdio.h>
 
 static Model model;
-static Tilemap tilemap;
-static GLuint bg;
 static float* compMat4;
 static float scale = TILE_SIZE/2;
 static float WIDTH, HEIGHT;
@@ -16,10 +14,8 @@ static Vec2D camera;
 Entity *Player;
 
 //load the game world
-void loadWorld(float w, float h, Level lvl, Entity *player) {
+void loadWorld(float w, float h, Entity *player) {
 
-	tilemap = lvl.map;
-	bg = lvl.bg;
 	WIDTH = w;
 	HEIGHT = h;
 	Player = player;
@@ -88,7 +84,7 @@ void prepRender() {
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 }
 
-void renBackground() {
+void drawBackground(GLuint bg) {
 	//backGround
 	compMat4 = createMat4(NULL);
 	loadIdentity(compMat4);
@@ -100,7 +96,7 @@ void renBackground() {
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
 }
 
-void drawMap() {
+void drawMap(Tilemap tilemap) {
 	//Render tilemap
 	for(int i = 0; i < tilemap.nTiles; ++i) {
 
@@ -128,8 +124,33 @@ void drawMap() {
 	}
 }
 
+void drawEntitiy(Entity *entity) {
+	loadIdentity(compMat4);
+	translateMat(compMat4, (Vec2D){entity->pos.x, entity->pos.y});
+	scaleMat(compMat4, scale);
+	loadCompositeMatrix(compMat4);
+	glBindTexture(GL_TEXTURE_2D, entity->animation.spriteSheet.texture);
+	setFacing(entity->facing);
+
+	//sprite sheet animation
+	animate(&entity->animation);
+	loadFrame(entity->animation.frame);
+	loadSpriteSize(entity->animation.spriteSheet.spriteSize);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+}
+
+void drawEntities(Enemy *enemies, int nEnemies) {
+
+	for(int i =0; i < nEnemies; ++i)
+		drawEntitiy(&enemies[i].entity);
+
+	drawEntitiy(Player);
+}
+
 //Render the world
-void renderWorld() {
+void renderWorld(Level *lvl) {
 	setFacing(true); //texture facing false - back -- true - front
 	loadFrame((Vec2D){0, 0});
 	loadSpriteSize((Vec2D){1, 1});
@@ -139,26 +160,13 @@ void renderWorld() {
 		fprintf(stderr,"OpenGL error: %d\n", err);
     }
 
-	renBackground();
+	drawBackground(lvl->bg);
 
 	updateCamera();
 
-	drawMap();
+	drawMap(lvl->map);
 
-	//Entities
-	loadIdentity(compMat4);
-	translateMat(compMat4, (Vec2D){Player->pos.x,Player->pos.y});
-	scaleMat(compMat4, scale);
-	loadCompositeMatrix(compMat4);
-
-	//sprite sheet animation
-	glBindTexture(GL_TEXTURE_2D, Player->animation.spriteSheet.texture);
-	setFacing(Player->facing);
-	animate(&Player->animation);
-	loadFrame(Player->animation.frame);
-	loadSpriteSize(Player->animation.spriteSheet.spriteSize);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	drawEntities(lvl->enemies, lvl->nEnemies);
 }
 
 //cleanUp
@@ -166,7 +174,6 @@ void worldCleanUp() {
 	unBindShader();
 	unBindModel();
 	free(compMat4);
-	freeMap(&tilemap);
 	shaderCleanUp();
 	fprintf(stderr,"World Destroyed.\n");
 }

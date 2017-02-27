@@ -6,7 +6,7 @@
 #include "Entity.h"
 
 //Loads Word with give width & height
-void loadWorld(float w, float h, Level lvl, Entity *player);
+void loadWorld(float w, float h, Entity *player);
 
 //Prepare OGL
 void prepOGL();
