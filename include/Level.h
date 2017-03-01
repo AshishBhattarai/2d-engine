@@ -12,7 +12,8 @@ typedef struct {
 	GLuint bg;
 } Level;
 
-Level loadTilemap(const char* bitMapFile, const char* bg, SpriteSheet spriteSheet);
+Level loadTilemap(const char* bitMap, const char* spriteSheet, const char* bg,
+			      const char* aSpriteSheet);
 
 
 //free the loaded map

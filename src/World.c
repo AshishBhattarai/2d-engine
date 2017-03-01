@@ -81,7 +81,6 @@ void prepOGL() {
 //prepare to render something on da screen
 void prepRender() {
 	glClear(GL_COLOR_BUFFER_BIT);
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 }
 
 void drawBackground(GLuint bg) {

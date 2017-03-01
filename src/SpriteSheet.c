@@ -27,7 +27,7 @@ GLuint loadTexture(const char* file) {
 	return texture;
 }
 
-SpriteSheet loadSpriteSheet(char* file, Vec2D spriteD, Vec2D sheetD) {
+SpriteSheet loadSpriteSheet(const char* file, Vec2D spriteD, Vec2D sheetD) {
 	SpriteSheet spriteSheet;
 	spriteSheet.texture = loadTexture(file);
 	spriteSheet.sheetD = sheetD;

@@ -30,15 +30,17 @@ static Enemy createEnemy(int x, int y, Entity emy, enum EnemyType type) {
 }
 
 //uses bitmap to load tiles coordinates to any array of Tile
-Level loadTilemap(const char* bitMapFile, const char* bg, SpriteSheet spriteSheet) {
+Level loadTilemap(const char *bitMap, const char *spriteSheet, const char* bg,
+			   const char* aSpriteSheet) {
 
 	Tilemap tilemap;
-	tilemap.spriteSheet = spriteSheet;
+	tilemap.spriteSheet = loadSpriteSheet(spriteSheet, (Vec2D){64,64},
+													   (Vec2D){128,256});
 
 	int width, height;
 	//load da bitmap
 	unsigned char* bitmap = SOIL_load_image (
-		bitMapFile,
+		bitMap,
 		&width,
 		&height,
 		0,
@@ -56,18 +58,16 @@ Level loadTilemap(const char* bitMapFile, const char* bg, SpriteSheet spriteShee
 	int ntile = 0, sizeT = 500, nEnemy = 0, sizeE = 20;
 	//allocate space for 100 tiles
 	Tile *tiles = (Tile *) malloc(sizeof(Tile)*sizeT);
-
 	Enemy *enemies = (Enemy *) malloc(sizeof(Enemy)*sizeE);
-
-	//pre create spriteSheet & animationFor Coin
-	SpriteSheet coinSheet = loadSpriteSheet("coin.png", (Vec2D){32,32},
-											(Vec2D){192, 32});
-	Animation coinAnimation = initAnimation(coinSheet);
-
 
 	SpriteSheet enemySheet = loadSpriteSheet("sprites.png", (Vec2D){64,64},
 											(Vec2D){384, 128});
 	Entity enemyTest = initEntity((Vec2D){0, 0}, enemySheet);
+
+	//pre create spriteSheet & animationFor Coin
+	SpriteSheet coinSheet = loadSpriteSheet(aSpriteSheet, (Vec2D){32,32},
+											(Vec2D){192, 32});
+	Animation coinAnimation = initAnimation(coinSheet);
 
 	//iterate through the pixels and get r,g,b value of each pixel
 	for(int x = 0; x < MAP_WIDTH; ++x)
@@ -81,14 +81,28 @@ Level loadTilemap(const char* bitMapFile, const char* bg, SpriteSheet spriteShee
 				tiles[ntile] = createTile(x, y, 0, 0, true, false);
 				++ntile;
 
+			} else if (r == 255 && g == 102 && b == 204) {
+				tiles[ntile] = createTile(x, y, 1, 0, true, false);
+				++ntile;
 			} else if(r==255 && g==0 && b==204) {
 
-				tiles[ntile] = createTile(x, y, 1, 0, false, false);
+				tiles[ntile] = createTile(x, y, 1, 1, false, false);
+				++ntile;
+			} else if(r == 102 && g == 51 && b ==102) {
+				tiles[ntile] = createTile(x, y, 0, 2, false, false);
+				++ntile;
+			} else if(r == 51 && g == 0 && b == 51) {
+				tiles[ntile] = createTile(x, y, 0, 1, true, false);
+				++ntile;
+
+			} else if(r == 0 && g == 0 && b == 255) {
+				tiles[ntile] = createTile(x, y, 0, 3, true, false);
 				++ntile;
 			} else if(r==100 && g==100 && b==0) {
 
 				tiles[ntile] = createTile(x, y, 0, 0, false, true);
 				tiles[ntile].animation = coinAnimation;
+				tiles[ntile].animation.state = 0;
 				++ntile;
 			} else if(r == 153 && g == 255 && b == 153) {
 				enemies[nEnemy] = createEnemy(x, y, enemyTest, NORMAL);

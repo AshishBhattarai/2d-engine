@@ -5,19 +5,30 @@ Vec2D em; //enemy movement
 bool reach = false;
 
 
-static void patrol(Enemy *enemy) {
+void patrol(Enemy *enemy) {
 	if(!reach) {
 		em.x += 0.1f;
-		reach = (enemy->entity.pos.x >= enemy->point.x) ? true : false;
+		if(enemy->entity.pos.x >= enemy->point.x) {
+			enemy->entity.pos.x = enemy->point.x;
+			reach = true;
+		}
 		enemy->entity.facing = true;
-	} else if(reach) {
+	}
+	if(reach) {
 		em.x -= 0.1f;
-		reach = (enemy->entity.pos.x <= enemy->point.y) ? false : true;
+		if(enemy->entity.pos.x <= enemy->point.y) {
+			enemy->entity.pos.x = enemy->point.y;
+			reach = false;
+		}
 		enemy->entity.facing = false;
 	}
 }
 
+
+
 void activateEnemy(Enemy *enemy, Tilemap tilemap, float delta) {
+	em.x = 0;
+	em.y = 0;
 	if(enemy->type == NORMAL)
 		patrol(enemy);
 

@@ -23,6 +23,8 @@ typedef struct  {
 //Initialize Entity
 Entity initEntity(Vec2D pos, SpriteSheet spriteSheet);
 
+bool tileCollision(Entity entity, Tilemap map);
+
 //take movementValue applies gravity + collision & sets entities new position
 void moveEntity(Vec2D *movVal, Entity *entity, Tilemap map, float delta);
 
