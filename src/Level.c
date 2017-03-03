@@ -23,7 +23,8 @@ static Enemy createEnemy(int x, int y, Entity emy, enum EnemyType type) {
 	emy.pos.x = x*TILE_SIZE;
 	emy.pos.y = y*TILE_SIZE;
 	enemy.point.x = emy.pos.x + TILE_SIZE*2;
-	enemy.point.y = emy.pos.x - TILE_SIZE*2;
+	enemy.point.y = emy.pos.y - TILE_SIZE*2;
+	enemy.reach = false;
 	enemy.entity = emy;
 	enemy.type = type;
 	return enemy;

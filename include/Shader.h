@@ -2,18 +2,20 @@
 #define SHADER_H
 
 #include "GMath.h"
+#include <GL/glew.h>
 #include <stdbool.h>
 
 //Loades vertex, fragment shader
-void shaders(const char* vertexFile, const char* fragmentFile);
+//GLuint shaders(const char* vertexFile, const char* fragmentFile);
+GLuint createWShader(const char* vertexFile, const char* fragmentFile);
 
 //Use the loaded shader
-void bindShader();
+void bindShader(GLuint program);
 
 void unBindShader();
 
 //delete the shader program
-void shaderCleanUp();
+void shaderCleanUp(GLuint program);
 
 //load Composite matrix to shader
 void loadCompositeMatrix(float* mat4);

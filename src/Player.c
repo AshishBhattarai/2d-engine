@@ -5,7 +5,6 @@
 
 
 Vec2D movement;
-
 static int oldState = GLFW_RELEASE;
 
 Player initPlayer(Vec2D pos, const char *spriteSheet, Vec2D sheetSize) {

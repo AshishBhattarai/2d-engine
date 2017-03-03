@@ -10,6 +10,7 @@ typedef struct {
 	Entity entity;
 	Vec2D point;
 	enum EnemyType type;
+	bool reach;
 } Enemy;
 
 void activateEnemy(Enemy *enemy, Tilemap tilemap, float delta);

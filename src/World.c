@@ -13,6 +13,8 @@ static float RATIO;
 static Vec2D camera;
 Entity *Player;
 
+GLuint wProgram;
+
 //load the game world
 void loadWorld(float w, float h, Entity *player) {
 
@@ -21,12 +23,12 @@ void loadWorld(float w, float h, Entity *player) {
 	Player = player;
 
 	model = loadModel();
-	shaders("shaders/vertex.glsl", "shaders/fragment.glsl");
+	wProgram = createWShader("shaders/vertex.glsl", "shaders/fragment.glsl");
 
 	RATIO = w/h;
 	float* proj = loadOrtho(0.0, w, 0.0, h, -1.0f, 1.0f);
 
-	bindShader();
+	bindShader(wProgram);
 	loadProjectionMatrix(proj);
 	unBindShader();
 
@@ -75,7 +77,7 @@ void prepOGL() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	bindModel();
-	bindShader();
+	bindShader(wProgram);
 }
 
 //prepare to render something on da screen
@@ -173,6 +175,6 @@ void worldCleanUp() {
 	unBindShader();
 	unBindModel();
 	free(compMat4);
-	shaderCleanUp();
+	shaderCleanUp(wProgram);
 	fprintf(stderr,"World Destroyed.\n");
 }

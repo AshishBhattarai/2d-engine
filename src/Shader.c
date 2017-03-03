@@ -1,13 +1,11 @@
 #include "Shader.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <GL/glew.h>
 
-
-static GLuint program;
+//wProgram - world shader program
 
 //location of projection matrix &composite matrix in shaders
-static GLint locProjection, locComposite, locView, locFrame, locSpriteSize, facing;
+static GLint locWProjection, locWComposite, locWView, locWFrame, locWSpriteSize, WFacing;
 
 static GLuint loadShader(const char *file, GLuint type) {
 
@@ -55,15 +53,6 @@ static GLuint loadShader(const char *file, GLuint type) {
 	return shader;
 }
 
-static void getAllUniformLocs() {
-	locProjection = glGetUniformLocation(program, "projectionMatrix");
-	locComposite = glGetUniformLocation(program, "compositeMatrix");
-	locView = glGetUniformLocation(program, "viewMatrix");
-	locFrame = glGetUniformLocation(program, "frame");
-	locSpriteSize = glGetUniformLocation(program, "spriteSize");
-	facing = glGetUniformLocation(program, "facing");
-}
-
 static void loadMatrix(GLuint location, float* mat4) {
 	glUniformMatrix4fv(location, 1, GL_FALSE, mat4);
 }
@@ -78,53 +67,77 @@ static void loadVec2D(GLuint location, float x, float y) {
 
 //UniformLoaders
 void loadProjectionMatrix(float* proj) {
-	loadMatrix(locProjection, proj);
+	loadMatrix(locWProjection, proj);
 }
 
 void loadCompositeMatrix(float* mat4) {
-	loadMatrix(locComposite, mat4);
+	loadMatrix(locWComposite, mat4);
 }
 
 void loadViewMatrix(float* view) {
-	loadMatrix(locView, view);
+	loadMatrix(locWView, view);
 }
 
 void loadFrame(Vec2D frame) {
-	loadVec2D(locFrame, frame.x, frame.y);
+	loadVec2D(locWFrame, frame.x, frame.y);
 }
 
 void loadSpriteSize(Vec2D size) {
-	loadVec2D(locSpriteSize, size.x, size.y);
+	loadVec2D(locWSpriteSize, size.x, size.y);
 }
 
 void setFacing(bool bol) {
-	loadBool(facing, bol);
+	loadBool(WFacing, bol);
 }
 
-void shaders(const char* vertexFile, const char* fragmentFile) {
+//for world shader
+static void getAllUniformLocs(GLuint wProgram) {
+	locWProjection = glGetUniformLocation(wProgram, "projectionMatrix");
+	locWComposite = glGetUniformLocation(wProgram, "compositeMatrix");
+	locWView = glGetUniformLocation(wProgram, "viewMatrix");
+	locWFrame = glGetUniformLocation(wProgram, "frame");
+	locWSpriteSize = glGetUniformLocation(wProgram, "spriteSize");
+	WFacing = glGetUniformLocation(wProgram, "facing");
+}
+
+static void bindAttributes(GLuint wProgram) {
+	//Bind attributes
+	glBindAttribLocation(wProgram, 0, "vertexPos");
+	glBindAttribLocation(wProgram, 1, "textCoords");
+	glBindAttribLocation(wProgram, 2, "textCoords2");
+
+}
+
+GLuint shaders(const char* vertexFile, const char* fragmentFile, void (*bindAttrib)(GLuint)) {
 	//loadShaders
 	GLuint fragment = loadShader(fragmentFile, GL_FRAGMENT_SHADER);
 	GLuint vertex = loadShader(vertexFile, GL_VERTEX_SHADER);
 
 	//create programs
-	program = glCreateProgram();
+	GLuint program = glCreateProgram();
 	glAttachShader(program, vertex);
 	glAttachShader(program, fragment);
 
-	//Bind attributes
-	glBindAttribLocation(program, 0, "vertexPos");
-	glBindAttribLocation(program, 1, "textCoords");
-	glBindAttribLocation(program, 2, "textCoords2");
+	bindAttrib(program);
 
 	glLinkProgram(program);
 	glValidateProgram(program);
-	getAllUniformLocs();
 
 	glDeleteShader(vertex);
 	glDeleteShader(fragment);
+
+	return program;
 }
 
-void bindShader() {
+//world shader
+GLuint createWShader(const char* vertexFile, const char* fragmentFile) {
+
+	GLuint wProgram = shaders(vertexFile, fragmentFile, bindAttributes);
+	getAllUniformLocs(wProgram);
+	return wProgram;
+}
+
+void bindShader(GLuint program) {
 	glUseProgram(program);
 }
 
@@ -132,8 +145,8 @@ void unBindShader() {
 	glUseProgram(0);
 }
 
-void shaderCleanUp() {
+void shaderCleanUp(GLuint wProgram) {
 	glUseProgram(0);
-	glDeleteProgram(program);
+	glDeleteProgram(wProgram);
 	fprintf(stderr, "Shader Deleted.\n");
 }
