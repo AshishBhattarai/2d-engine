@@ -37,6 +37,7 @@ void patrol(Enemy *enemy) {
 	if(!enemy->reach) {
 		em.x += 0.1f;
 		if(enemy->entity.pos.x >= enemy->point.x) {
+			enemy->entity.pos.x = enemy->point.x;
 			enemy->reach = true;
 		}
 		enemy->entity.facing = true;
@@ -44,6 +45,7 @@ void patrol(Enemy *enemy) {
 	if(enemy->reach) {
 		em.x -= 0.1f;
 		if(enemy->entity.pos.x <= enemy->point.y) {
+			enemy->entity.pos.x = enemy->point.y;
 			enemy->reach = false;
 		}
 		enemy->entity.facing = false;
