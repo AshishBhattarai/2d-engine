@@ -11,7 +11,7 @@ int main() {
 
 	createDisplay(WIDTH, HEIGHT, "2D-Engine");
 
-	Player player = initPlayer((Vec2D){0, 200}, "knight.png", (Vec2D){256, 128});
+	Player player = initPlayer((Vec2D){0, 200}, "player.png", (Vec2D){384, 64});
 
 	//t1 - 90 C-CW - Flip Horizontally - Flip V
 	Level lvl1;

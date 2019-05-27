@@ -17,8 +17,8 @@ static void errorCallback(int error, const char* description) {
 
 static void calcFps() {
 	if(glfwGetTime() - lastFrame > 1) {
-		char sFps[4];
-		sprintf(sFps, "%d ", fpsCnt);
+		char sFps[20];
+		snprintf(sFps, sizeof(sFps), "%d ", fpsCnt);
 		glfwSetWindowTitle(window, strcat(sFps, wTitle));
 		fpsCnt = 0;
 		lastFrame = glfwGetTime();
