@@ -36,7 +36,7 @@ Level loadTilemap(const char *bitMap, const char *spriteSheet, const char* bg,
 
 	Tilemap tilemap;
 	tilemap.spriteSheet = loadSpriteSheet(spriteSheet, (Vec2D){64,64},
-													   (Vec2D){128,256});
+													   (Vec2D){128,64});
 
 	int width, height;
 	//load da bitmap
